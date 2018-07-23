@@ -1,0 +1,59 @@
+---
+title: "A Decade of NIH Awards (2007-2017)"
+output: html_notebook
+---
+
+Load the needed data files
+```{r}
+library(readr)
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+data <- read_csv("data/2007-2017 - NIH Funding.csv")
+data$FUNDING <- as.numeric(gsub('[$,]', '', data$FUNDING))
+head(data)
+```
+
+Create a new dataset with missing data omited
+```{r}
+library(IDPmisc)
+data_censored <- NaRV.omit(data)
+```
+
+```{r}
+hist(data_censored$FUNDING/1e8, main = "2007-2017 - NIH Funding", xlab = "Millions $")
+```
+
+Look at log 10 Funding Distribution
+```{r}
+data_censored$FUNDING <- log(data_censored$FUNDING, 10)
+head(data_censored)
+avg <- mean(data_censored$FUNDING)
+std <- sd(data_censored$FUNDING)
+hist(data_censored$FUNDING, main = "2007-2017 - NIH Funding", xlab = "Log 10 ($)")
+```
+
+What're BCM values?
+```{r}
+dfBCM <- subset(data_censored, ORGANIZATION == "BAYLOR COLLEGE OF MEDICINE")
+head(dfBCM)
+```
+
+```{r}
+Look 
+
+Add vertical lines for BCM
+```{r}
+hist(data_censored$FUNDING, main = "2007-2017 - NIH Funding", xlab = "Log 10 ($)")
+lapply(dfBCM$FUNDING,
+       FUN = function(award) {
+         abline(v=award, col = "blue")
+       })
+```
+
+Generate a time graph for BCM NIH finances
+```{r}
+## there's an issue where for years 2007-2010, BCM has two awards
+plot(x=dfBCM$YEAR, y = dfBCM$FUNDING, xlab = "Year", ylab = "Log 10 ($)", main = "2007-2017 NIH Awards to Baylor College of Medicine")
+```
+
+
