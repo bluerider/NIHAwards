@@ -6,54 +6,33 @@ output: html_notebook
 Load the needed data files
 ```{r}
 library(readr)
-
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-data <- read_csv("data/2007-2017 - NIH Funding.csv")
-data$FUNDING <- as.numeric(gsub('[$,]', '', data$FUNDING))
-head(data)
-```
-
-Create a new dataset with missing data omited
-```{r}
-library(IDPmisc)
-data_censored <- NaRV.omit(data)
+source("global.R")
 ```
 
 ```{r}
-hist(data_censored$FUNDING/1e8, main = "2007-2017 - NIH Funding", xlab = "Millions $")
-```
-
-Look at log 10 Funding Distribution
-```{r}
-data_censored$FUNDING <- log(data_censored$FUNDING, 10)
-head(data_censored)
-avg <- mean(data_censored$FUNDING)
-std <- sd(data_censored$FUNDING)
-hist(data_censored$FUNDING, main = "2007-2017 - NIH Funding", xlab = "Log 10 ($)")
-```
-
-What're BCM values?
-```{r}
-dfBCM <- subset(data_censored, ORGANIZATION == "BAYLOR COLLEGE OF MEDICINE")
-head(dfBCM)
+## plot the histogram showing NIH funding from 2007-2017
+hist(log(data_censored_USA$FUNDING), main="2007-2017 NIH Funding",
+     xlab="Log($)")
 ```
 
 ```{r}
-Look 
-
-Add vertical lines for BCM
-```{r}
-hist(data_censored$FUNDING, main = "2007-2017 - NIH Funding", xlab = "Log 10 ($)")
-lapply(dfBCM$FUNDING,
-       FUN = function(award) {
-         abline(v=award, col = "blue")
-       })
+## plot the scatter plot correlation matrix for normalized nih data
+plot(df_nih_normalize, main="NIH Awards 2007-2017 Correlation")
 ```
 
-Generate a time graph for BCM NIH finances
 ```{r}
-## there's an issue where for years 2007-2010, BCM has two awards
-plot(x=dfBCM$YEAR, y = dfBCM$FUNDING, xlab = "Year", ylab = "Log 10 ($)", main = "2007-2017 NIH Awards to Baylor College of Medicine")
+## plot the scatter plot correlation matrix for normalized GDP data
+plot(df_gdp_normalize, main="State GDP 2007-2017 Correlation")
 ```
+
+```{r}
+## plot the scatter plot correlation matrix for combined GDP and NIH metric
+plot(df_combined_normalize, main="Combined GDP and NIH Awards 2007-2017 Correlation")
+```
+
+```{r}
+## plot the scatter plot correlatin matrix for GDP vs. NIH metric
+plot(df_gdp_vs_nih, main="Ratio of GDP and NIH Awards 2007-2017 Correlation")
+````
 
 
