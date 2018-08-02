@@ -88,7 +88,7 @@ df_gdp_normalize <- as.data.frame(
 )
 df_gdp_normalize <- cbind(df_gdp$State, df_gdp_normalize)
 ## add proper names
-names(df_gdp_normalize) <- names(df_gdp)
+names(df_gdp_normalize) <- names(df_nih_normalize)
 
 ## let's create a combined dataframe of the GDP and NIH data
 df_combined <- df_gdp_normalize[-1] + df_nih_normalize[-1]
@@ -99,19 +99,26 @@ df_combined_normalize <- as.data.frame(
          })
 )
 df_combined_normalize <- cbind(df_gdp_normalize$State, df_combined_normalize)
-names(df_combined_normalize) <- names(df_gdp)
+names(df_combined_normalize) <- names(df_nih_normalize)
 
 ## let's look at some ratios
 df_gdp_vs_nih <- df_gdp_normalize[-1] / df_nih_normalize[-1]
 df_gdp_vs_nih <- cbind(df_gdp_normalize$State, df_gdp_vs_nih)
-names(df_gdp_vs_nih) <- names(df_gdp)
+names(df_gdp_vs_nih) <- names(df_nih_normalize)
 
-## let's get some preliminary map data
-nih_map_data <- fifty_states
-nih_map_data$States <- state.abb[match(nih_map_data$id, tolower(state.name))]
-nih_map_data$States[is.na(nih_map_data$States)] <- "DC"
-nih_map_data <- merge(df_nih_normalize, nih_map_data)
-ggplot(data = nih_map_data) + 
-  geom_polygon(aes(x=long, y = lat, fill = nih_map_data$`2017`, 
-                   group=nih_map_data$States), 
-               color="white")
+## function to generate the required map
+genMap <- function(type) {
+  nih_map_data <- fifty_states
+  nih_map_data$States <- state.abb[match(nih_map_data$id, tolower(state.name))]
+  nih_map_data$States[is.na(nih_map_data$States)] <- "DC"
+  if (type == "NIH Awards") {
+    nih_map_data <- merge(df_nih_normalize, nih_map_data)
+  } else if (type == "State GDP") {
+    nih_map_data <- merge(df_gdp_normalize, nih_map_data)
+  } else if (type == "Combined") {
+    nih_map_data <- merge(df_combined_normalize, nih_map_data)
+  } else if (type == "Ratio") {
+    nih_map_data <- merge(df_gdp_vs_nih, nih_map_data)
+  }
+  return(nih_map_data)
+}
