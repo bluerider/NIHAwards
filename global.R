@@ -6,6 +6,7 @@ library(shiny)
 library(maps)
 library(fiftystater)
 library(ggplot2)
+library(plotly)
 
 ## load the NIH data
 # needed for rstudio
