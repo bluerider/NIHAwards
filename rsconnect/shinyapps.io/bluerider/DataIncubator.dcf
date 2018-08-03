@@ -5,9 +5,9 @@ account: bluerider
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 393980
-bundleId: 1515086
+bundleId: 1515681
 url: https://bluerider.shinyapps.io/DataIncubator/
-when: 1533234077.04699
+when: 1533254614.05974
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Analysis.nb.html|Analysis.Rmd|README.md|R/.Rhistory|R/98_make_clean.R|R/99_make_all.R|results/A Decade of NIH Funding - Histogram.png|results/A Decade of NIH Funding - Logarithmic Histogram.png|NIH DATA
+ignoredFiles: Analysis.nb.html|Analysis.Rmd|README.md|R/.Rhistory|R/98_make_clean.R|R/99_make_all.R|NIH DATA|results

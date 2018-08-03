@@ -10,6 +10,6 @@ server = function(input, output) {
                        fill = nih_map_data[[index]],
                        group=group),
                    color="white") +
-      theme_bw()
+      theme_bw() + scale_fill_gradient(low="blue", high="red")
   })
 }
