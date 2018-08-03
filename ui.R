@@ -12,6 +12,6 @@ dashboardPage(
     )
   ),
   dashboardBody(
-    plotOutput("map_plot", width= "100%", height="800px")
+    plotlyOutput("map_plot", width= "100%", height="800px")
   )
 )
